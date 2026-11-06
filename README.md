@@ -1,64 +1,87 @@
-# Universal Business Analytics & ML Studio
+<div align="center">
 
-A dataset-agnostic starter kit for a 24-hour datathon. Plug in **any** tabular
-business dataset (retail, supply chain, demand forecasting, risk, churn,
-finance, etc.) and get a working end-to-end pipeline -- data profiling, EDA,
-model training/comparison, predictions, business insights, and exportable
-reports -- with **zero hardcoded column names**.
+![header](https://capsule-render.vercel.app/api?type=waving&color=gradient&height=200&section=header&text=SupplySense&fontSize=45&fontColor=fff)
 
-## Why this exists
+![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&pause=1000&color=22C55E&center=true&vCenter=true&width=700&lines=Dataset-agnostic+AutoML+studio;Upload+any+CSV+%E2%86%92+EDA+%2B+models+%2B+business+report)
 
-The dataset for the datathon is only released on the day itself. This kit is
-built so that when it drops, you spend your time on modeling and insight,
-not on plumbing: upload the file, confirm the auto-detected target column,
-and the rest of the pipeline adapts automatically.
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)
+![XGBoost](https://img.shields.io/badge/XGBoost-0E7FB5?style=for-the-badge)
+![MIT License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
+![Made By](https://img.shields.io/badge/Made%20by-Fayaz--2007-blueviolet?style=for-the-badge)
 
-## Project Structure
+</div>
+
+## 📌 Overview
+
+At a 24-hour datathon, the real dataset only drops on the day itself, so most of the clock gets eaten by plumbing instead of modeling. SupplySense is a dataset-agnostic AutoML studio: upload any tabular business dataset — retail, supply chain, demand forecasting, risk, churn, finance — confirm the auto-detected target column, and the rest of the pipeline adapts automatically with zero hardcoded column names. It handles profiling, EDA, model training/comparison, predictions, business insights and exportable reports end to end.
+
+## ✨ Features
+
+- 🔍 Auto-detection of column types, target column and problem type (classification / regression / time series) — never by column name
+- 📊 Automatic EDA — histograms, boxplots, correlation heatmap, missing-value chart, categorical breakdowns
+- 🤖 Train and compare Logistic/Linear Regression, Decision Tree, Random Forest, XGBoost, LightGBM and CatBoost
+- 📦 Single artifact bundle (`best_model.joblib`) packaging the fitted cleaner, encoder, scaler and model together
+- 🔮 Predictions page to score new CSV/Excel files with the saved model
+- 💬 AI Assistant for executive summaries, recommendations and prediction explanations (Groq or Gemini)
+- 📈 Business Insights, Dashboard Analytics and CSV/Excel/PDF report exports
+- ⚡ CLI alternative (`main.py`) for a quick end-to-end pipeline run outside the UI
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Dashboard | ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white) ![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=flat-square&logo=plotly&logoColor=white) |
+| ML | ![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat-square&logo=scikitlearn&logoColor=white) ![XGBoost](https://img.shields.io/badge/XGBoost-0E7FB5?style=flat-square) ![LightGBM](https://img.shields.io/badge/LightGBM-02569B?style=flat-square) ![CatBoost](https://img.shields.io/badge/CatBoost-FFCC00?style=flat-square) |
+| AI layer | Groq (default) · Gemini (`google-genai`) |
+| Data / IO | pandas · numpy · openpyxl · xlrd · fpdf2 |
+
+## 🏗️ Architecture
+
+```mermaid
+flowchart LR
+    U[Upload CSV/Excel] --> DET[utils/helpers.py\ncolumn-type & target detection]
+    DET --> PRE[preprocessing/\nclean · encode · scale · split]
+    PRE --> TRAIN[models/train.py\nmulti-model training]
+    TRAIN --> CMP[models/compare_models.py\nleaderboard]
+    TRAIN --> BUNDLE[models/predict.py\nartifact bundle .joblib]
+    BUNDLE --> PRED[Predictions on new data]
+    TRAIN --> LLM[AI Assistant\nGroq / Gemini]
+    PRED --> DASH[dashboard/\nStreamlit pages + charts.py]
+    LLM --> DASH
+```
+
+## 📂 Project Structure
 
 ```
-project/
-├── app.py                     # Streamlit entry point (page router)
-├── main.py                    # CLI pipeline runner (no UI)
+supply-chain/
+├── app.py                  # Streamlit entry point (page router)
+├── main.py                 # CLI pipeline runner (no UI)
 ├── requirements.txt
-├── README.md
-│
-├── data/
-│   ├── raw/                   # Drop the datathon dataset here (optional)
-│   └── processed/             # Cleaned/engineered data snapshots
-│
-├── notebooks/                 # Scratch analysis notebooks
-│
-├── models/
-│   ├── train.py                # Model registry + training
-│   ├── predict.py               # Inference on new data + artifact bundling
-│   ├── evaluate.py              # Classification/regression metrics
-│   └── compare_models.py        # Multi-model leaderboard + ranking
-│
-├── preprocessing/
-│   ├── clean.py                # Missing values, outliers, duplicates
-│   ├── encode.py                # Categorical encoding (one-hot / label)
-│   ├── scale.py                 # Numerical scaling
-│   └── split.py                  # Train/test split (random or chronological)
-│
+├── models/                 # train.py, predict.py, evaluate.py, compare_models.py
+├── preprocessing/          # clean.py, encode.py, scale.py, split.py
 ├── dashboard/
-│   ├── pages/                  # One module per Streamlit page
-│   ├── components/              # Sidebar, uploader, KPI cards, download buttons
-│   └── charts.py                 # Reusable Plotly chart builders
-│
-├── utils/
-│   ├── helpers.py               # Column-type/target/problem-type auto-detection
-│   ├── config.py                  # Paths, constants, session-state keys
-│   └── logger.py                   # Centralized logging
-│
+│   ├── pages/               # one module per Streamlit page
+│   ├── components/          # sidebar, uploader, KPI cards
+│   └── charts.py
+├── utils/                  # helpers.py, config.py, logger.py
+├── services/                # LLM provider integrations (Groq, Gemini)
+├── data/
+│   ├── raw/
+│   └── processed/
 └── outputs/
-    ├── models/                  # Saved model artifact bundles (.joblib)
-    ├── reports/                  # Logs, leaderboards, PDF reports
-    └── figures/                   # Exported chart images (optional)
+    ├── models/
+    ├── reports/
+    └── figures/
 ```
 
-## Getting Started
+## ⚙️ Installation
 
 ```bash
+git clone https://github.com/Fayaz-2007/supply-chain.git
+cd supply-chain
+
 pip install -r requirements.txt
 streamlit run app.py
 ```
@@ -67,76 +90,51 @@ Then open the local URL Streamlit prints (typically `http://localhost:8501`).
 
 ### Environment variables
 
-The AI Assistant, executive summaries, recommendations, and prediction
-explanations use an LLM provider and need an API key. Everything else
-(upload, preprocessing, AutoML, predictions, dashboards) works fully without
-one.
+The AI Assistant, executive summaries, recommendations and prediction explanations need an LLM API key; everything else (upload, preprocessing, AutoML, predictions, dashboards) works fully without one.
 
 ```bash
 cp .env.example .env
 ```
 
-Then edit `.env` and set:
+| Variable | Required | Get a key at |
+|---|---|---|
+| `GROQ_API_KEY` | Yes, for AI features (default provider) | console.groq.com/keys |
+| `GEMINI_API_KEY` | Only if you switch the active provider to Gemini in `services/llm_service.py` | aistudio.google.com/apikey |
 
-| Variable          | Required                       | Get a key at                         |
-|-------------------|---------------------------------|---------------------------------------|
-| `GROQ_API_KEY`    | Yes, for AI features (default provider) | https://console.groq.com/keys        |
-| `GEMINI_API_KEY`  | Only if you switch the active provider to Gemini in `services/llm_service.py` | https://aistudio.google.com/apikey  |
-
-`.env` is git-ignored -- never commit real keys. If a key is ever exposed
-(e.g. pushed by mistake), rotate it immediately from the provider's console.
-
-## Using it with your dataset
+## 🚀 Usage
 
 1. Go to **Dataset Explorer** and upload a CSV or Excel file.
-2. Confirm (or override) the auto-suggested **target column**, **date
-   column**, and **problem type** (classification / regression / time series).
-3. Explore the data on the **EDA** page -- histograms, boxplots, correlation
-   heatmap, missing-value chart, and categorical breakdowns are generated
-   automatically for whatever columns exist.
-4. On **Model Training**, pick a problem type and one or more models
-   (Logistic/Linear Regression, Decision Tree, Random Forest, XGBoost,
-   LightGBM, CatBoost), then **Train Model(s)** or **Compare Models**.
-5. **Save Best Model** persists a single artifact bundle (`outputs/models/best_model.joblib`)
-   containing the fitted cleaner, encoder, scaler, and model together, so
-   predictions are always preprocessed identically to training.
-6. Use **Predictions** to upload a new CSV/Excel file and download the
-   scored output.
-7. **Business Insights**, **Dashboard Analytics**, and **Reports** turn the
-   trained model and predictions into KPIs, feature importance, filterable
-   charts, and CSV/Excel/PDF exports.
+2. Confirm (or override) the auto-suggested target column, date column and problem type.
+3. Explore the data on the **EDA** page — charts are generated automatically for whatever columns exist.
+4. On **Model Training**, pick a problem type and one or more models, then Train or Compare Models.
+5. **Save Best Model** persists a single artifact bundle for consistent preprocessing at prediction time.
+6. Use **Predictions** to score a new file, and **Business Insights / Dashboard Analytics / Reports** to turn results into KPIs and exports.
 
-### CLI alternative
-
-For a quick end-to-end sanity check outside the UI:
+CLI alternative:
 
 ```bash
 python main.py --data data/raw/your_dataset.csv --target your_target_column
 ```
 
-Omit `--target` to let the pipeline auto-detect it, and `--problem-type` to
-let it auto-infer classification vs. regression from the target's values.
+`[Screenshot: EDA page with auto-generated charts]`
 
-## How the "generic" pipeline works
+`[Screenshot: model comparison leaderboard]`
 
-- **Column-type detection** (`utils/helpers.py`) classifies every column into
-  numerical, categorical, datetime, or identifier-like based on dtype and
-  cardinality -- never by name.
-- **Target detection** looks for common business-target keywords (target,
-  label, churn, risk, demand, sales, ...) and falls back to the last column.
-- **Problem-type inference** checks whether the target is numeric with high
-  cardinality (regression) or categorical/low-cardinality (classification).
-- **Preprocessing** (`preprocessing/`) is fit once on the training split and
-  reused identically for the test split and any later prediction data.
-- **Model artifact bundles** (`models/predict.py`) package the fitted
-  cleaner + encoder + scaler + model + metadata into one joblib file so a
-  single object is all that's needed to score new data correctly.
+## 🔮 Future Improvements
 
-## Extending
+- Add more model families (e.g. deep learning baselines) to the registry
+- Chronological/time-series-aware cross-validation in `compare_models.py`
+- Richer PDF report templates beyond the current `real_report.pdf` baseline
+- Persisted run history across datathon sessions
 
-- Add a new model: register it in `models/train.py`'s classification/regression
-  builder functions and add its display name to `utils/config.py`.
-- Add a new chart: add a function to `dashboard/charts.py` and call it from
-  the relevant page in `dashboard/pages/`.
-- Add a new page: create `dashboard/pages/your_page.py` with a `render()`
-  function, then register it in `app.py`'s `_PAGE_ROUTER`.
+## 👨‍💻 Author
+
+**Fayaz Ahmed**
+GitHub: [@Fayaz-2007](https://github.com/Fayaz-2007)
+LinkedIn: [fayaz-ahmed-59287631a](https://linkedin.com/in/fayaz-ahmed-59287631a)
+
+<div align="center">
+
+![footer](https://capsule-render.vercel.app/api?type=waving&color=gradient&height=150&section=footer)
+
+</div>
