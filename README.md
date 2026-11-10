@@ -30,12 +30,21 @@ At a 24-hour datathon, the real dataset only drops on the day itself, so most of
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Dashboard | ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white) ![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=flat-square&logo=plotly&logoColor=white) |
-| ML | ![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat-square&logo=scikitlearn&logoColor=white) ![XGBoost](https://img.shields.io/badge/XGBoost-0E7FB5?style=flat-square) ![LightGBM](https://img.shields.io/badge/LightGBM-02569B?style=flat-square) ![CatBoost](https://img.shields.io/badge/CatBoost-FFCC00?style=flat-square) |
-| AI layer | Groq (default) · Gemini (`google-genai`) |
-| Data / IO | pandas · numpy · openpyxl · xlrd · fpdf2 |
+**Languages**
+
+![](https://skillicons.dev/icons?i=py)
+
+**ML**
+
+![](https://skillicons.dev/icons?i=sklearn)
+
+**Tools**
+
+![](https://skillicons.dev/icons?i=git,github)
+
+**Also using**
+
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white) ![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white) ![XGBoost](https://img.shields.io/badge/XGBoost-0E7FB5?style=for-the-badge) ![LightGBM](https://img.shields.io/badge/LightGBM-02569B?style=for-the-badge) ![CatBoost](https://img.shields.io/badge/CatBoost-FFCC00?style=for-the-badge) ![Groq](https://img.shields.io/badge/Groq-F55036?style=for-the-badge) ![Gemini](https://img.shields.io/badge/Gemini%20AI-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white)
 
 ## 🏗️ Architecture
 
